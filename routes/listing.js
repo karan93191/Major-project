@@ -9,9 +9,6 @@ const listingController=require("../controller/listing.js")
 const multer  = require('multer')
 const {storage}=require("../cloudconfig.js")
 const upload = multer({ storage })
-// const upload = multer({ dest 'uploads/' })
-
-
 const validateListing = (req, res, next) => {
   const { error } = listingSchema.validate(req.body);
   if (error) {
@@ -22,12 +19,9 @@ const validateListing = (req, res, next) => {
 };
 
   // index route and craete route
-router.route("/listings")
-.get((listingController.index))
-.post(isloggedin,upload.single('listing[image]'),validateListing, wrapAsync(listingController.createlisting))
-// .post(upload.single('listing[image]'),(req,res)=>{
-//   res.send(req.file)
-// })
+    router.route("/listings")
+  .  get((listingController.index))
+    .post(isloggedin,upload.single('listing[image]'),validateListing, wrapAsync(listingController.createlisting))
   
     // new route
     router.get("/listings/new",isloggedin,(listingController.renderNewform))
