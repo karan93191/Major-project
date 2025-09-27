@@ -1,12 +1,11 @@
 if(process.env.NODE_ENV !="production"){
   require('dotenv').config()
 }
-// console.log(process.env) 
 const express=require("express")
 
 const app=express()
 const mongoose=require("mongoose")
-const Listing=require("../majorproject/models/listing")
+const Listing=require("./models/listing")
 const path=require("path")
 const methodOverride=require("method-override")
 const ejsMate=require("ejs-mate")
@@ -19,7 +18,6 @@ app.set("views",path.join(__dirname,"views"))
 app.use(express.static(path.join(__dirname,"/public")))
 app.use(express.urlencoded({extended:true}))
 app.use(methodOverride("_method"))
-// app.use(express.json());
 const wrapAsync=require("./utils/wrapAsync.js")
 const ExpressError=require("./utils/ExpressError.js")
 const {listingSchema,reviewSchema}=require("./schema.js")
@@ -40,14 +38,6 @@ main().then(()=>{
       await mongoose.connect(dbUrl);
     }
     
-//    const validateListing=(req,res,next)=>{
-//      let {err}=  listingSchema.validate(req.body);
-//        if(err){
-//   throw new ExpressError(400, err);
-// }else{
-//   next();
-// }
-//    }
 const store = MongoStore.create({
   mongoUrl: dbUrl,
   crypto: {
@@ -67,9 +57,6 @@ const sessionOptions={
   },
 }
 
-// app.get("/",(req,res)=>{
-//       res.send("hi i am root")
-//     })
 app.use(session(sessionOptions))
 app.use(flash())
 app.use(passport.initialize())
@@ -84,14 +71,6 @@ app.use((req,res,next)=>{
   res.locals.currUser=req.user
   next();
 })
-// app.get("/demouser",async(req,res)=>{
-//   let fakeUser=new User({
-//     email:"student@gmail.com",
-//     username:"delta-batch"
-//   })
-//    let regiterdeuser=await User.register(fakeUser,"helloWorld")
-//    res.send(regiterdeuser)
-// })
 app.use("/",user)
 app.use("/",listings)
 app.use("/",reviews)
@@ -104,24 +83,9 @@ app.use("/",reviews)
     app.use((err,req,res,next)=>{
       let {status=500,message="something wrong"}=err
       res.status(status).render("listings/error.ejs",{message})
-      // res.status(status).send(message)
     })
    
     
      app.listen(8080,(()=>{
       console.log("app is listening on 8080")
     }))
-
-
-    // app.get("/testlisting",(req,res)=>{
-    //   let sampleListing=new Listing({
-    //     title:"my new villa",
-    //     description:"by the beach",
-    //     price:1200,
-    //     location:"calangute,goa",
-    //     country:"India"
-    //   })
-    //   sampleListing.save()
-    //   console.log("sample was saved")
-    //   res.send("succesuful")
-    // })
