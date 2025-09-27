@@ -63,6 +63,15 @@ if(listing.length==0){
 }
      res.render("listings/search.ejs",{listing})
     }
+    module.exports.listingCategory=async (req, res) => {
+  const { cat } = req.params;
+  const allListings = await Listing.find({ category: cat });
+  if(allListings.length==0){
+    req.flash("error","No listing exist on this page")
+    return res.redirect("/listings")
+  }
+  res.render("listings/index.ejs", { allListings, cat });
+}
   module.exports.renderEditform=async (req,res)=>{
         let {id}=req.params;
         const listing=await Listing.findById(id)

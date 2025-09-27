@@ -43,14 +43,6 @@ router.route("/listings")
     router.get("/listings/:id/edit",isloggedin,isOwner,wrapAsync (listingController.renderEditform))
 
     // category route
-    router.get("/listings/category/:cat", async (req, res) => {
-  const { cat } = req.params;
-  const allListings = await Listing.find({ category: cat });
-  if(allListings.length==0){
-    req.flash("error","No listing exist on this page")
-    return res.redirect("/listings")
-  }
-  res.render("listings/index.ejs", { allListings, cat });
-});
+    router.get("/listings/category/:cat",listingController.listingCategory);
     
     module.exports=router
