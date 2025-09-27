@@ -1,6 +1,5 @@
  
   const apiKey = mapkey;
-//   console.log(apiKey)
     const map = new maplibregl.Map({
         container: 'map', // container id
         style:`https://api.maptiler.com/maps/streets/style.json?key=${apiKey}`, // style URL
